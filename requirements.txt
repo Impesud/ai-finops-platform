@@ -1,48 +1,85 @@
-# FastAPI + ASGI Server
+# ==============================
+# ⚡️ FastAPI + ASGI Server
+# ==============================
 fastapi==0.111.0
 uvicorn[standard]==0.29.0
 
-# Data manipulation
+# ==============================
+# 🧮 Data Manipulation
+# ==============================
 pandas==2.2.2
 numpy==1.26.4
+python-dateutil==2.9.0.post0
 
-# Machine Learning & Forecasting
+# ==============================
+# 🤖 Machine Learning & Forecasting
+# ==============================
 scikit-learn==1.4.2
 xgboost==2.0.3
-statsmodels==0.14.2  # ✅ forecasting compatibile
+statsmodels==0.14.2           # ✅ Compatible with forecasting
+pyod==1.1.3                   # Anomaly detection
 
-# Anomaly Detection
-pyod==1.1.3
-
-# Visualization
+# ==============================
+# 📊 Data Visualization
+# ==============================
 matplotlib==3.8.4
 seaborn==0.13.2
 
-# Jupyter & Lab
+# ==============================
+# 📓 Jupyter & Notebooks
+# ==============================
 notebook==7.2.0
 jupyterlab==4.2.1
+ipykernel==6.29.4
+ipywidgets==8.1.2
 
-# Database & ORM
+# ==============================
+# 🗄 Database & ORM
+# ==============================
 sqlalchemy==2.0.30
 asyncpg==0.29.0
 psycopg2-binary==2.9.9
 
-# Auth & Security
+# ==============================
+# 🔐 Auth & Security
+# ==============================
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 
-# Environment & Config
+# ==============================
+# ⚙️ Configuration & Env
+# ==============================
 python-dotenv==1.0.1
 pydantic-settings==2.2.1
 
-# Cloud SDKs (optional)
+# ==============================
+# ☁️ Cloud SDKs (optional)
+# ==============================
 boto3==1.34.107
 google-cloud-billing==1.9.0
 
-# Monitoring
+# ==============================
+# 📈 Monitoring & Logging
+# ==============================
 prometheus-client==0.20.0
 
-# MLflow (optional)
+# ==============================
+# 📦 MLflow (Model Registry, optional)
+# ==============================
 mlflow==2.13.0
+
+# ==============================
+# 🧪 Testing
+# ==============================
+pytest==7.4.4
+httpx==0.27.0                 # Required for FastAPI test client
+
+# ==============================
+# 🧹 Code Quality & Formatting (optional)
+# ==============================
+black==24.4.2
+flake8==7.0.0
+mypy==1.10.0
+
 
 
