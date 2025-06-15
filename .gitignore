@@ -1,6 +1,52 @@
+# Python
 venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.Python
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+*.sqlite3
+
+# Environment
 .env
-.DS_Store
+.env.*
+
+# Jupyter
 .ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Node/React/Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+frontend/.env.*
+
+# Logs
+*.log
+logs/
+
+# Docker
+*.pid
+
+# VSCode
+.vscode/
+
+# Coverage
+coverage/
+coverage.xml
+
+# Test output
+junit.xml
+
+# Misc
+*.swp
+*.swo
