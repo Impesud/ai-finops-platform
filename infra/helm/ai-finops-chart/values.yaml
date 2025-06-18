@@ -1,0 +1,19 @@
+image:
+  repository: ghcr.io/impesud/ai-finops-platform-app
+  tag: ""
+  pullPolicy: IfNotPresent
+
+frontendImage:
+  repository: ghcr.io/impesud/ai-finops-platform-frontend
+  tag: ""
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8000
+  nodePort: 30080
+
+frontendService:
+  type: NodePort
+  port: 3000
+  nodePort: 30081

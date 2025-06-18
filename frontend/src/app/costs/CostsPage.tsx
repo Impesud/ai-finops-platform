@@ -40,7 +40,7 @@ export default function CostsPage() {
   const [account, setAccount] = useState(searchParams.get('account_id') || '');
 
   useEffect(() => {
-    fetch('http://localhost:8000/costs')
+    fetch('/api/costs')
       .then((res) => res.json())
       .then((json) => {
         setData(json);
