@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-finops-frontend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: ai-finops-frontend
+  template:
+    metadata:
+      labels:
+        app: ai-finops-frontend
+    spec:
+      containers:
+        - name: ai-finops-frontend
+          image: "{{ .Values.frontendImage.repository }}:{{ .Values.frontendImage.tag }}"
+          imagePullPolicy: {{ .Values.frontendImage.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.frontendService.port }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
