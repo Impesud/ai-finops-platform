@@ -53,6 +53,7 @@ junit.xml
 *.swo
 
 # Terraform local files
+.terraform/
 **/.terraform/
 *.tfstate
 *.tfstate.*
