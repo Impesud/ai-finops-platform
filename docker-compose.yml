@@ -1,10 +1,31 @@
-version: '3.8'
 services:
-  web:
-    build: .
+  backend:
+    image: ghcr.io/impesud/ai-finops-platform-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-finops-app
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./app:/app/app
+      - ./data:/app/data
+    working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
+
+  frontend:
+    image: ghcr.io/impesud/ai-finops-platform-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ai-finops-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+

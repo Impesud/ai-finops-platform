@@ -2,6 +2,7 @@
 
 ## 🚀 Tech Stack Badges
 
+![CI/CD](https://github.com/Impesud/ai-finops-platform/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-AF002A?logo=xgboost&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikit-learn&logoColor=white)
@@ -139,16 +140,27 @@ make docker-up
 ```
 - Avvia l’intera piattaforma in container Docker.
 
-### ✅ Lint & Test (Frontend)
+### ✅ Publish to GitHub Container Registry
+```bash
+make publish
+```
+
+### ✅ Backend Test
+```bash
+make test
+```
+
+### ✅ Frontend Test
 ```bash
 cd frontend
 npm run lint
 npm test
 ```
 
-### ✅ Lint & Test (Backend)
+### ✅ Deploy Pipeline on AWS (Helm + EKS)
 ```bash
-make test
+make full-setup #To provision the full environment (EKS cluster, IAM, ALB controller, Helm setup, etc.)
+make deploy #To deploy or update the platform on an existing cluster (after building & pushing images)
 ```
 
 ---
@@ -188,6 +200,8 @@ ai-finops-platform/
 │   ├── terraform/                # Terraform modules for AWS/GCP/Azure
 │   └── helm/                     # Helm charts for Kubernetes deployment
 │
+├── scripts                       # 🔧 Automation scripts for setup, deploy and cluster
+├
 ├── tests/                        # 🧪 Backend unit and integration tests
 │   ├── test_api.py               # FastAPI endpoint tests
 │   ├── test_models.py            # Tests for models and logic
@@ -216,48 +230,48 @@ ai-finops-platform/
 | 2     | Build and validate ML models                | 2 weeks  | ⏳ In Progress|
 | 3     | Backend API & Auth                         | 1 week   | ⏳ In Progress|
 | 4     | Frontend dashboard (React + Next.js)        | 2 weeks  | ⏳ In Progress|
-| 5     | Testing and CI/CD (Jest, Pytest, GitHub Actions) | 1 week   | ⏳ Pending    |
-| 6     | Dockerization & DevOps integration          | 1 week   | ⏳ Pending    |
+| 5     | Testing and CI/CD (Jest, Pytest, GitHub Actions) | 1 week   | ⏳ In Progress    |
+| 6     | Dockerization & DevOps integration          | 1 week   | ⏳ In Progress   |
 
 ## 📝 Progress Update (June 2025)
-- Initial infrastructure setup and billing data ingestion completed.
-- Started development of ML models and backend APIs.
-- Created first data cleaning notebooks.
-- Established the basic structure for the frontend (React/Next.js).
-
-## 🚧 Known Issues / TODO
-- Authentication and some backend APIs are still under development.
-- The frontend currently displays only sample/static data.
-- Automated tests and CI/CD pipeline are not yet implemented.
+- Initial infrastructure setup and billing data ingestion completed
+- Started development of ML models and backend APIs
+- Created first data cleaning notebooks
+- Established the basic structure for the frontend (React/Next.js)
+- Added CI/CD workflow and GHCR publishing pipeline
+- Implemented full deployment pipeline using the `scripts/` folder, Helm charts, and AWS EKS
 
 ---
 
-## 🧠 Future Modules
-- Carbon footprint estimator
-- Multi-cloud benchmark comparison
-- Smart auto-scaler recommendations
+## 🚧 Known Issues / TODO
+- Authentication and backend APIs are still in progress
+- Frontend currently uses mock data
+- Automated tests and production-ready CI/CD pipeline not fully implemented
+- Terraform infrastructure modules are being developed to replace parts of `scripts/`
+- Production CI/CD integration and testing pending
 
 ---
 
 ## 🛠️ Makefile Commands
-
-| Command             | Description                                 |
-|---------------------|---------------------------------------------|
-| `make init`         | Setup Python virtual environment & install deps |
-| `make run`          | Run FastAPI backend (dev mode)              |
-| `make dev`          | Run frontend (React) & backend together (dev) |
-| `make notebook`     | Launch Jupyter Notebook                     |
-| `make test`         | Run backend tests (pytest)                  |
-| `make docker-build` | Build Docker image                          |
-| `make docker-up`    | Start all services with Docker Compose      |
-| `make docker-stop`  | Stop all Docker Compose services            |
-| `make clean`        | Clean Python cache and build artifacts      |
-| `make frontend-install` | Install frontend dependencies           |
-| `make frontend-build`   | Build frontend for production           |
-| `make frontend-start`   | Start frontend in production mode       |
-| `make frontend-dev`     | Start frontend in dev mode              |
-| `make frontend-lint`    | Lint frontend code                      |
-| `make frontend-test`    | Run frontend tests                      |
+```bash
+make init             # Setup Python virtual environment & install deps
+make run              # Run FastAPI backend (dev mode)
+make dev              # Run frontend + backend (dev mode)
+make notebook         # Launch Jupyter Notebook
+make test             # Run backend tests (pytest)
+make docker-build     # Build Docker image
+make docker-up        # Start all services with Docker Compose
+make docker-stop      # Stop all Docker Compose services
+make publish          # Build & push Docker images to GHCR
+make frontend-install # Install frontend dependencies
+make frontend-build   # Build frontend for production
+make frontend-start   # Start frontend in production mode
+make frontend-dev     # Start frontend in dev mode
+make frontend-lint    # Lint frontend code
+make frontend-test    # Run frontend tests
+```
+Note:
+For detailed steps and custom commands, see the [`Makefile`](./Makefile) and scripts in the [`scripts/`](./scripts/) folder.
 
 ---
 
