@@ -1,31 +1,56 @@
 name: CI
+
 on:
   push:
-    branches: [ main ]
+    branches: [dev]
   pull_request:
-    branches: [ main ]
+    branches: [dev]
 
 permissions:
   contents: read
   packages: write
 
 jobs:
-  docker:
+  build-and-push:
+    name: Build, Test & Publish Docker Images
     runs-on: ubuntu-latest
-    name: Build, Test and Push Docker Images to GHCR
+    env:
+      REGISTRY: ghcr.io/impesud
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Generate dynamic tag
+        id: tag
+        run: |
+          echo "TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+          echo "SHORT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install backend dependencies & run tests
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pytest --maxfail=1 --disable-warnings -q
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
+      - name: Install frontend dependencies & run tests
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run lint
+          npm test -- --watchAll=false
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -37,34 +62,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Run Backend Tests
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          make test
-
-      - name: Run Frontend Tests
-        run: |
-          cd frontend
-          npm ci
-          npm run lint
-          npm test
-
-      - name: Build and Push Backend Image
+      - name: Build & push backend image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/impesud/ai-finops-platform-backend:latest
+          tags: |
+            ${{ env.REGISTRY }}/ai-finops-platform-backend:${{ env.TAG }}
+            ${{ env.REGISTRY }}/ai-finops-platform-backend:latest
 
-      - name: Build and Push Frontend Image
+      - name: Build & push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ghcr.io/impesud/ai-finops-platform-frontend:latest
+          tags: |
+            ${{ env.REGISTRY }}/ai-finops-platform-frontend:${{ env.TAG }}
+            ${{ env.REGISTRY }}/ai-finops-platform-frontend:latest
 
