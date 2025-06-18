@@ -56,3 +56,6 @@ junit.xml
 infra/terraform/
 *.tfstate
 *.tfstate.*
+
+# CI and CD
+.github/
