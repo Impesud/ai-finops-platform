@@ -5,7 +5,7 @@ from datetime import datetime
 client = TestClient(app)
 
 def test_get_all_costs():
-    response = client.get("/costs")
+    response = client.get("/api/costs")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
     assert len(response.json()) > 0
