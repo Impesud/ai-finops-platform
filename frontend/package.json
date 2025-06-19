@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --config jest.config.ts --watchAll=false"
+    "test": "jest --watchAll=false"
   },
   "dependencies": {
     "next": "15.3.3",
@@ -34,7 +34,8 @@
     "eslint": "^9.28.0",
     "eslint-config-next": "15.3.3",
     "identity-obj-proxy": "^3.0.0",
-    "jest-environment-jsdom": "^29.0.0",
+    "jest": "^30.0.1",
+    "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.5.5",
     "tailwindcss": "^4.1.10",
     "ts-jest": "^29.4.0",
