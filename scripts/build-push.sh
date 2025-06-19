@@ -17,28 +17,28 @@ if [ -z "$IMAGE_BACKEND" ] || [ -z "$IMAGE_FRONTEND" ]; then
 fi
 
 # Generate build tag (unique timestamp)
-TAG=$(date +"%Y%m%d%H%M")
-echo "${TAG}" > .current_build_tag
-echo "🚀 Generated build tag: ${TAG}"
+PROD_TAG=prod-$(date +"%Y%m%d%H%M")
+echo "${PROD_TAG}" > .current_build_tag
+echo "🚀 Generated build tag: ${PROD_TAG}"
 
 # --- Build Backend ---
 echo "🔨 Building backend Docker image..."
-docker build -t ${IMAGE_BACKEND}:${TAG} -f Dockerfile .
+docker build -t ${IMAGE_BACKEND}:${PROD_TAG} -f Dockerfile .
 
 # --- Build Frontend ---
 echo "🔨 Building frontend Docker image..."
 cd frontend
-docker build -t ${IMAGE_FRONTEND}:${TAG} .
+docker build -t ${IMAGE_FRONTEND}:${PROD_TAG} .
 cd ..
 
 # --- Push Docker Images ---
 echo "📤 Pushing backend image..."
-docker push ${IMAGE_BACKEND}:${TAG}
+docker push ${IMAGE_BACKEND}:${PROD_TAG}
 
 echo "📤 Pushing frontend image..."
-docker push ${IMAGE_FRONTEND}:${TAG}
+docker push ${IMAGE_FRONTEND}:${PROD_TAG}
 
-echo "✅ Build & push completed successfully for tag ${TAG}"
+echo "✅ Build & push completed successfully for tag ${PROD_TAG}"
 
 
 
