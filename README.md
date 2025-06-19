@@ -163,6 +163,14 @@ make full-setup #To provision the full environment (EKS cluster, IAM, ALB contro
 make deploy #To deploy or update the platform on an existing cluster (after building & pushing images)
 ```
 
+## AWS Deployment Screenshots
+
+Here are two snapshots of the platform deployed on AWS EKS:
+
+![AWS Deployment Overview 1](docs/img/ai-finops-01.png)
+
+![AWS Deployment Overview 2](docs/img/ai-finops-02.png)
+
 ---
 
 ## 📂 Repository Structure
