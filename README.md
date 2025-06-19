@@ -249,6 +249,8 @@ ai-finops-platform/
 - Added CI/CD workflow and GHCR publishing pipeline
 - Implemented full deployment pipeline using the `scripts/` folder, Helm charts, and AWS EKS
 
+![AI FinOps Platform - Roadmap Enterprise Grade](docs/img/ai-finops-03.png)
+
 ---
 
 ## 🚧 Known Issues / TODO
