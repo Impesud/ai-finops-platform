@@ -59,6 +59,7 @@ infra/terraform/
 
 # CI and CD
 .github/
+.current_build_tag
 
 #Policy files
 *.policy

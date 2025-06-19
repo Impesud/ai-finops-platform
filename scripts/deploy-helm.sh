@@ -22,15 +22,15 @@ if [[ ! -f .current_build_tag ]]; then
   exit 1
 fi
 
-TAG=$(cat .current_build_tag)
-echo "🚀 Deploying AI FinOps Platform Helm Chart with image tag: ${TAG}"
+PROD_TAG=$(cat .current_build_tag)
+echo "🚀 Deploying AI FinOps Platform Helm Chart with image tag: ${PROD_TAG}"
 
 # Helm deploy
 helm upgrade --install "${RELEASE_NAME}" "${CHART_PATH}" \
-  --set image.tag="${TAG}" \
-  --set frontendImage.tag="${TAG}"
+  --set image.tag="${PROD_TAG}" \
+  --set frontendImage.tag="${PROD_TAG}"
 
-echo "✅ Helm deployment completed successfully for release '${RELEASE_NAME}' with tag '${TAG}'"
+echo "✅ Helm deployment completed successfully for release '${RELEASE_NAME}' with tag '${PROD_TAG}'"
 
 
 
