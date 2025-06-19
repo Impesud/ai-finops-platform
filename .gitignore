@@ -58,7 +58,6 @@ infra/terraform/
 *.tfstate.*
 
 # CI and CD
-.github/
 .current_build_tag
 
 #Policy files
