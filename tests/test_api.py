@@ -22,7 +22,7 @@ def test_get_costs_by_service():
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
-    assert all(item["service"] == "Amazon Elastic Compute Cloud - Computeg" for item in data)
+    assert all(item["service"] == "Amazon Elastic Compute Cloud - Compute" for item in data)
 
 
 def test_get_costs_date_range():
