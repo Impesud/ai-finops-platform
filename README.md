@@ -25,17 +25,22 @@
 
 ---
 
-## 📘 Overview
-**AI FinOps** is an advanced AI-driven FinOps platform. It enables real-time cloud cost monitoring, forecasting, and optimization across AWS, Azure, and GCP using machine learning, automation, and DevOps practices.
+## 📖 Overview
 
----
+**AI FinOps Platform** is an AI-powered platform for cloud cost optimization and forecasting. Built with FastAPI, Python, and modern MLOps tools, it allows teams to track multi-cloud usage (AWS, Azure, GPC), detect anomalies, and predict future expenses using real-time data and machine learning.
 
-## 🎯 Objectives
-- Optimize cloud resource usage and cost efficiency
-- Predict monthly spending using machine learning
-- Detect anomalous cost spikes and resource misusage
-- Provide actionable AI-based cost-saving recommendations
-- Offer a user-friendly dashboard for Finance & Tech teams
+Key features:
+
+- Unified ingestion pipelines for each provider
+- Powerful REST API with FastAPI & OpenAPI docs
+- Interactive React dashboard (Next.js + TailwindCSS)
+- ML-driven forecasting & anomaly detection
+- Full IaC deployment via Terraform & Helm
+
+### Recent UI Updates
+![FinOps frontend 01](docs/img/ai-finops-01.png)
+![FinOps frontend 02](docs/img/ai-finops-02.png)
+![FinOps frontend 03](docs/img/ai-finops-03.png)
 
 ---
 
@@ -66,231 +71,85 @@
 
 ---
 
-## 📦 Key Features
-- Multi-cloud cost tracking in real-time
-- Forecasting & budgeting module (ML-powered)
-- Anomaly detection and alert system
-- Interactive dashboard with usage heatmaps and forecasts
-- Cost optimization suggestions
-- Slack/Teams/email integration for alerts
+## 🎯 Objectives
+- Optimize cloud resource usage and cost efficiency
+- Predict monthly spending using machine learning
+- Detect anomalous cost spikes and resource misusage
+- Provide actionable AI-based cost-saving recommendations
+- Offer a user-friendly dashboard for Finance & Tech teams
 
 ---
 
-## 🔒 Security
-- OAuth2 / JWT for authentication
-- RBAC for user access control
-- Audit logs for user and system actions
+## 🆕 Changelog
+
+### July 2025 Updates
+
+- **Enhanced API docs** with detailed parameter descriptions & examples
+- **Ingestion**: Added per-provider scripts, unified CSV loader and header-only fallback
+- **Makefile**: New targets for `ingest-api`, `fetch-aws`, `fetch-azure`, `fetch-gcp`
+- **Infrastructure**: Updated Terraform modules partially.
+- **Security**: Enforced CORS policies and OAuth2/JWT authentication on backend
+- **User Manual**: Expanded with Docker Compose, Jupyter, and CLI workflows
+
+### June 2025 Updates
+
+- Added `provider` field to all cost endpoints and UI filters
+- Switched to stacked bar & multi-series line charts for richer insights
+- Introduced infinite scroll and deduplication in cost tables
+- Proxying `/docs` & `/redoc` through Next.js for consolidated UX
+- Updated complete Helm modules for deployment in AWS.
 
 ---
 
-## 🧪 Data & AI Pipeline
-- Simulated or real billing datasets (e.g. AWS Cost Explorer)
-- ETL pipeline for cleaning and feature engineering (`notebooks/00_data_cleaning.ipynb`, `app/services/etl.py`)
-- ML model training and validation
-- Model deployment and versioning via MLflow or custom pipeline
+## 🚀 Quick Start
 
----
-
-## 🧰 Setup & Usage
-
-### ✅ Environment Setup (Backend)
 ```bash
-python -m venv venv
-source venv/bin/activate      
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+# 1. Clone repo
+git clone https://github.com/Impesud/ai-finops-platform.git
+cd ai-finops-platform
 
-### ✅ Run FastAPI API (Backend)
-```bash
-uvicorn app.main:app --reload
-```
-- Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
-- Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+# 2. Setup venv & install
+make init
 
-### ✅ Launch Jupyter Notebook
-```bash
-jupyter notebook
-```
-- Open: `notebooks/00_data_cleaning.ipynb`, `notebooks/01_forecasting.ipynb`
+# 3. Ingest sample data
+make fetch-aws
+make fetch-azure
+make fetch-gcp
+# or via API
+make ingest-api
 
-### ✅ Generate Simulated AWS Dataset
-- Using Python and Faker
-- Generated 1000-row dataset with columns: date, service, account_id, usage_type, cost_usd, region
-- Saved to: `data/aws_cost_explorer_1000.csv`
-
-### ✅ Frontend Setup (React + Next.js)
-```bash
-cd frontend
-npm install
-npm run dev
-```
-- Visit: [http://localhost:3000](http://localhost:3000)
-
-### ✅ Unified Dev Mode (Backend + Frontend)
-```bash
+# 4. Run app
 make dev
-```
-- Avvia sia il backend FastAPI che il frontend React in modalità sviluppo.
 
-### ✅ Build & Run Docker
-```bash
-make docker-build
-make docker-up
-```
-- Avvia l’intera piattaforma in container Docker.
+# 5. Explore
+- Dashboard: http://localhost:3000
+- Swagger:   http://localhost:3000/docs
+- ReDoc:     http://localhost:3000/redoc
 
-### ✅ Publish to GitHub Container Registry
-```bash
-make publish
-```
-
-### ✅ Backend Test
-```bash
-make test
-```
-
-### ✅ Frontend Test
-```bash
-cd frontend
-npm run lint
-npm test
-```
-
-### ✅ Deploy Pipeline on AWS (Helm + EKS)
-```bash
+# 6. Deploy Pipeline on AWS (Helm + EKS)
 make full-setup #To provision the full environment (EKS cluster, IAM, ALB controller, Helm setup, etc.)
 make deploy #To deploy or update the platform on an existing cluster (after building & pushing images)
 ```
 
-## AWS Deployment Screenshots
-
-Here are two snapshots of the platform deployed on AWS EKS:
-
-![AWS Deployment Overview 1](docs/img/ai-finops-01.png)
-
-![AWS Deployment Overview 2](docs/img/ai-finops-02.png)
-
 ---
 
 ## 📂 Repository Structure
+
 ```
-ai-finops-platform/
-│
-├── app/                          # 🧠 Backend API using FastAPI
-│   ├── main.py                   # Application entry point
-│   ├── api/                      # REST API routes (e.g., /costs, /forecasts)
-│   ├── core/                     # Core config, auth, logging
-│   ├── models/                   # Pydantic & ORM models
-│   ├── services/                 # Business logic and external integrations
-│   │   └── etl.py                # ETL utilities for dataset processing
-│   └── utils/                    # Utility functions
-│
-├── frontend/                     # 💻 Frontend dashboard (React + Tailwind + Next.js)
-│   ├── public/                   # Static files
-│   ├── src/                      # React source code
-│   │   ├── components/           # UI components (e.g., Navbar)
-│   │   ├── app/                  # Next.js app directory (pages, routes)
-│   │   ├── services/             # API calls
-│   │   └── App.tsx               # Main app component
-│   ├── tests/                    # Frontend unit tests
-│   ├── jest.config.ts            # Jest config for frontend
-│   ├── tsconfig.json             # TypeScript config
-│   └── package.json              # NPM scripts and dependencies
-│
-├── notebooks/                    # 📊 Jupyter Notebooks for data science
-│   ├── 00_data_cleaning.ipynb    # Dataset cleaning and feature engineering
-│   ├── 01_forecasting.ipynb      # Cost forecasting (Prophet/XGBoost)
-│   ├── 02_anomaly_detection.ipynb# Anomaly detection module
-│   ├── 03_clustering.ipynb       # Clustering and cost recommendations
-│
-├── infra/                        # ☁️ Infrastructure as Code (Terraform, Helm)
-│   ├── terraform/                # Terraform modules for AWS/GCP/Azure
-│   └── helm/                     # Helm charts for Kubernetes deployment
-│
-├── scripts                       # 🔧 Automation scripts for setup, deploy and cluster
-├
-├── tests/                        # 🧪 Backend unit and integration tests
-│   ├── test_api.py               # FastAPI endpoint tests
-│   ├── test_models.py            # Tests for models and logic
-│
-├── docs/                         # 📖 Documentation
-│   ├── architecture.md           # System architecture and diagrams
-│   └── user_manual.md            # User guide and usage instructions
-│
-├── data/                         # Real or simulated billing datasets
-│   └── aws_cost_explorer_1000.csv
-│
-├── .gitignore
-├──  docker-compose.yml
-├──  Dockerfile
-├──  Makefile
-├──  README.md
-└──  requirements.txt
+app/           # FastAPI backend
+frontend/      # Next.js dashboard
+services/      # ETL & ingestion modules
+scripts/       # Ingestion & deployment scripts
+notebooks/     # ML notebooks
+infra/         # Terraform & Helm
+app/data/      # Generated CSVs
+docs/          # Documentation & images
+tests/         # Pytest suites
+Makefile       # Task automation
+README.md      # Project overview
 ```
 
 ---
 
-## 🗓️ Roadmap (Aggiornato)
-| Phase | Description                                 | Duration | Status        |
-|-------|---------------------------------------------|----------|--------------|
-| 1     | Setup infrastructure, billing API ingestion | 1 week   | ✅ Completed  |
-| 2     | Build and validate ML models                | 2 weeks  | ⏳ In Progress|
-| 3     | Backend API & Auth                         | 1 week   | ⏳ In Progress|
-| 4     | Frontend dashboard (React + Next.js)        | 2 weeks  | ⏳ In Progress|
-| 5     | Testing and CI/CD (Jest, Pytest, GitHub Actions) | 1 week   | ⏳ In Progress    |
-| 6     | Dockerization & DevOps integration          | 1 week   | ⏳ In Progress   |
-
-## 📝 Progress Update (June 2025)
-- Initial infrastructure setup and billing data ingestion completed
-- Started development of ML models and backend APIs
-- Created first data cleaning notebooks
-- Established the basic structure for the frontend (React/Next.js)
-- Added CI/CD workflow and GHCR publishing pipeline
-- Implemented full deployment pipeline using the `scripts/` folder, Helm charts, and AWS EKS
-
-![AI FinOps Platform - Roadmap Enterprise Grade](docs/img/ai-finops-03.png)
-
----
-
-## 🚧 Known Issues / TODO
-- Authentication and backend APIs are still in progress
-- Frontend currently uses mock data
-- Automated tests and production-ready CI/CD pipeline not fully implemented
-- Terraform infrastructure modules are being developed to replace parts of `scripts/`
-- Production CI/CD integration and testing pending
-
----
-
-## 🛠️ Makefile Commands
-```bash
-make init             # Setup Python virtual environment & install deps
-make run              # Run FastAPI backend (dev mode)
-make dev              # Run frontend + backend (dev mode)
-make notebook         # Launch Jupyter Notebook
-make test             # Run backend tests (pytest)
-make docker-build     # Build Docker image
-make docker-up        # Start all services with Docker Compose
-make docker-stop      # Stop all Docker Compose services
-make publish          # Build & push Docker images to GHCR
-make frontend-install # Install frontend dependencies
-make frontend-build   # Build frontend for production
-make frontend-start   # Start frontend in production mode
-make frontend-dev     # Start frontend in dev mode
-make frontend-lint    # Lint frontend code
-make frontend-test    # Run frontend tests
-```
-Note:
-For detailed steps and custom commands, see the [`Makefile`](./Makefile) and scripts in the [`scripts/`](./scripts/) folder.
-
----
-
-## 📬 Contact
-
-Created by Erick Jara – CTO & Senior AI/Data Engineer  
-- GitHub: [Impesud](https://github.com/Impesud)  
-- Email: erick.jara@hotmail.it  
-- For issues or feature requests, please use the [GitHub Issues](https://github.com/Impesud/ai-finops-platform/issues) page.
-
-
-
+**Maintainer:** Erick Jara — CTO & AI/Data Engineer\
+📧 [erick.jara@hotmail.it](mailto\:erick.jara@hotmail.it) | 🌐 GitHub: [Impesud](https://github.com/Impesud)

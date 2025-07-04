@@ -8,7 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy full source code
 COPY app/ ./app
-COPY data/ ./data
 
 ENV PYTHONPATH=/app
 

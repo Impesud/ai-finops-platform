@@ -25,6 +25,10 @@ htmlcov/
 # macOS
 .DS_Store
 
+#Backend
+/app/data/*
+!/app/data/.gitkeep
+
 # Node/React/Frontend
 frontend/node_modules/
 frontend/.next/
