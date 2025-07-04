@@ -34,7 +34,7 @@ export default function AwsCostsPage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<HTMLTableRowElement | null>(null);
   const BATCH_SIZE = 100;
 
   const [service, setService]     = useState(searchParams.get('service')   || '');
@@ -184,7 +184,7 @@ export default function AwsCostsPage() {
                 <Tooltip formatter={v => `$${(v as number).toFixed(2)}`} />
                 <Legend verticalAlign="top" />
                 <Bar dataKey="cost" name="Cost">
-                  <LabelList dataKey="cost" position="top" formatter={v => `$${(v as number).toFixed(0)}`} />
+                  <LabelList dataKey="cost" position="top" formatter={(v: number) => `$${(v as number).toFixed(0)}`} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
