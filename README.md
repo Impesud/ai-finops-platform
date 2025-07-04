@@ -40,7 +40,7 @@ Key features:
 ### Recent UI Updates
 ![FinOps frontend 01](docs/img/ai-finops-01.png)
 ![FinOps frontend 02](docs/img/ai-finops-02.png)
-![FinOps frontend 03](docs/img/ai-finops-02.png)
+![FinOps frontend 03](docs/img/ai-finops-03.png)
 
 ---
 
@@ -148,3 +148,8 @@ tests/         # Pytest suites
 Makefile       # Task automation
 README.md      # Project overview
 ```
+
+---
+
+**Maintainer:** Erick Jara — CTO & AI/Data Engineer\
+📧 [erick.jara@hotmail.it](mailto\:erick.jara@hotmail.it) | 🌐 GitHub: [Impesud](https://github.com/Impesud)
