@@ -83,5 +83,17 @@ flake8==7.0.0
 mypy==1.10.0
 isort==5.13.2
 
+# ==============================
+# 📓 Documentation
+# ==============================
+redoc
+
+# ==============================
+# 🧪 Ingestion
+# ==============================
+google-cloud-bigquery
+azure-identity 
+azure-mgmt-costmanagement
+
 
 

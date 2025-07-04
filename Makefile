@@ -1,9 +1,7 @@
 # AI FinOps Platform - FULL PRODUCTION PIPELINE + LOCAL DEVELOPMENT
 
 # --- Configuration ---
-DATETAG ?= $(shell date +%Y%m%d%H%M)
-CLUSTER_NAME=ai-finops-cluster
-REGION=eu-central-1
+API_BASE      = http://127.0.0.1:8000
 
 # ================================
 # === 🧪 LOCAL DEVELOPMENT =======
@@ -20,6 +18,22 @@ backend:
 # Run full stack (frontend + backend)
 dev:
 	cd frontend && npm run dev & uvicorn app.main:app --reload
+
+# Trigger ingestion via FastAPI POST /api/v1/ingestion
+ingest-api:
+	curl -X POST $(API_BASE)/api/v1/ingestion/ \
+	  -H "Content-Type: application/json" \
+	  -d '{"start":"2025-01-01","end":"2025-06-30"}'
+
+# Run per-provider ingestion scripts (overwrites CSVs)
+fetch-aws:
+	python3 -m scripts.ingestion.fetch_aws
+
+fetch-azure:
+	python3 -m scripts.ingestion.fetch_azure
+
+fetch-gcp:
+	python3 -m scripts.ingestion.fetch_gcp
 
 # Run Python backend tests
 test:
@@ -68,8 +82,8 @@ docker-down:
 
 # Install CLI tools (kubectl, eksctl, helm, terraform)
 install-tools:
-	chmod +x ./scripts/install-kubectl.sh && ./scripts/install-kubectl.sh
-	chmod +x ./scripts/get-latest-helm.sh && ./scripts/get-latest-helm.sh
+	chmod +x ./scripts/install-kubectl.sh    && ./scripts/install-kubectl.sh
+	chmod +x ./scripts/get-latest-helm.sh    && ./scripts/get-latest-helm.sh
 	chmod +x ./scripts/get-latest-terraform.sh && ./scripts/get-latest-terraform.sh
 
 # Create EKS Cluster
@@ -112,3 +126,4 @@ cluster-reset:
 # Destroy EKS Cluster entirely
 destroy-eks:
 	chmod +x ./scripts/destroy-eks.sh && ./scripts/destroy-eks.sh
+

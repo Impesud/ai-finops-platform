@@ -1,75 +1,138 @@
 # 📘 AI FinOps Platform
 
-💪 To set up the AI FinOps Platform, first create a Python virtual environment using:
+## Local Setup & Development
+
+**1. Create Python virtual environment**
+
 ```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+make init
 ```
 
-🚀 Then run the FastAPI backend with:
+Creates `venv/` and installs dependencies from `requirements.txt`.
+
+**2. Run FastAPI backend**
+
 ```bash
-make run
+make backend
 ```
 
-📌 You can access the live API documentation here:  
-http://127.0.0.1:8000/docs
+Starts the API at `http://127.0.0.1:8000` with auto-reload.
 
-📓 To use the Jupyter Notebooks for machine learning modules, launch them with:
+**3. Run full stack**
+
 ```bash
-make notebook
+make dev
 ```
 
-🔍 Then open the following files in your browser:  
-📈 notebooks/01_forecasting.ipynb  
-🚨 notebooks/02_anomaly_detection.ipynb  
-🧹 notebooks/03_clustering.ipynb
+Launches React frontend (`http://localhost:3000`) and FastAPI backend concurrently.
 
-✅ To run the test suite and validate backend functionality:
+**4. Access API docs**
+
+- Swagger UI:  `http://localhost:8000/docs` or `http://localhost:3000/docs`
+- ReDoc:        `http://localhost:8000/redoc` or `http://localhost:3000/redocs`
+
+**5. Trigger ingestion**
+
+- **All providers** (via API):
+  ```bash
+  make ingest-api
+  ```
+- **Per provider** (overwrite CSVs in `app/data/`):
+  ```bash
+  make fetch-aws
+  make fetch-azure
+  make fetch-gcp
+  ```
+
+**6. Run tests**
+
 ```bash
 make test
 ```
 
-🐳 To containerize and run the platform with Docker:
-```bash
-make docker-build
-make docker-up
-```
+Executes all backend pytest suites.
 
-📛 To stop all running Docker services:
-```bash
-make docker-stop
-```
+**7. Clean environment**
 
-🩹 To clean your local project environment and remove temporary files:
 ```bash
 make clean
 ```
 
-📋 Complete list of available Makefile commands for automation:
-- `make init` → 📦 Create the virtual environment and install requirements  
-- `make run` → 🚀 Start the FastAPI backend server  
-- `make notebook` → 📓 Launch the Jupyter interface  
-- `make test` → ✅ Execute unit and integration tests  
-- `make docker-build` → 🐳 Build Docker containers  
-- `make docker-up` → 🟢 Run the application via Docker  
-- `make docker-stop` → 🔻 Stop all Docker containers  
-- `make api-docs` → 🔍 Print the API documentation link  
-- `make clean` → 🩹 Clean up cache and temp files
+Removes Python caches and pytest cache.
 
-🧠 The platform uses FastAPI with PostgreSQL for relational storage and InfluxDB for time series data. Authentication and authorization are handled via OAuth2 and JWT tokens. The machine learning layer includes forecasting using XGBoost and statsmodels, anomaly detection with Isolation Forest and Autoencoders, clustering with KMeans, and cost-saving recommendations via Reinforcement Learning. Models are tracked and deployed using MLflow. The frontend is built using React and styled with TailwindCSS. All data is visualized using Chart.js and Recharts, with secure communication via JWT-protected API calls. Infrastructure provisioning is performed via Terraform for AWS, GCP, and Azure. The platform is deployed in Kubernetes clusters managed with Helm. Monitoring is performed using Prometheus and Grafana. Continuous integration and testing pipelines are configured using GitHub Actions.
+## Jupyter Notebooks
 
-📂 The repository is organized as follows:  
-📁 `app/` – FastAPI backend logic and APIs  
-📁 `frontend/` – React web dashboard with visualizations  
-📁 `notebooks/` – Jupyter notebooks for machine learning tasks  
-📁 `infra/` – Terraform modules and Helm charts  
-📁 `tests/` – Backend unit and integration tests  
-📁 `docs/` – Technical documentation and this manual  
-📁 `data/` – Simulated or real cloud billing datasets  
-📄 `Makefile` – Task automation  
-📄 `requirements.txt` – Python package list  
-📄 `docker-compose.yml` – Local container setup  
-📄 `README.md` – Main project summary
+Launch the notebook server:
+
+```bash
+make notebook
+```
+
+Then open:
+
+- `notebooks/01_forecasting.ipynb`
+- `notebooks/02_anomaly_detection.ipynb`
+- `notebooks/03_clustering.ipynb`
+
+## Docker Compose (Local Container)
+
+**Build & start services**
+
+```bash
+make docker-build-local
+make docker-up
+```
+
+**Stop**
+
+```bash
+make docker-down
+```
+
+## Production Deployment
+
+1. **Install CLI tools** (kubectl, eksctl, helm, terraform):
+   ```bash
+   make install-tools
+   ```
+2. **Provision EKS/GKE/AKS**
+   ```bash
+   make setup-eks
+   make setup-lb-controller
+   ```
+3. **Build & push images, deploy via Helm**
+   ```bash
+   make build-push
+   make helm-deploy
+   make get-url
+   ```
+4. **Full deploy script**
+   ```bash
+   make full-setup
+   ```
+
+## Project Structure
+
+```
+app/           # FastAPI backend
+frontend/      # Next.js React dashboard
+notebooks/     # ML notebooks
+infra/         # Terraform & Helm charts
+scripts/       # Ingestion & deploy scripts
+tests/         # Pytest suites
+app/data/      # Generated CSVs (aws_2025.csv, ...)
+Makefile       # Task automation
+requirements.txt
+docker-compose.yml
+```
+
+## Core Technologies
+
+- **Backend:** FastAPI, Pandas, Pydantic
+- **Frontend:** Next.js, React, TailwindCSS, Recharts
+- **ML:** XGBoost, Prophet, Isolation Forest, MLflow
+- **Infra:** Terraform, Kubernetes (Helm), Prometheus, Grafana
+
+*Last updated: July 2025*
 
 
