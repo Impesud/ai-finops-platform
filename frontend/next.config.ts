@@ -7,10 +7,13 @@ const API_BASE =
 
 const nextConfig: NextConfig = {
   async rewrites() {
+      const destination = API_BASE
+      ? `${API_BASE}/api/:path*`
+      : `/api/:path*`; 
     return [
       {
         source: "/api/:path*",
-        destination: `${API_BASE}/api/:path*`,
+        destination,
       },
     ];
   },
