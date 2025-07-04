@@ -43,7 +43,7 @@ export default function CostsPage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<HTMLTableRowElement | null>(null);
   const BATCH_SIZE = 100;
 
   const [provider, setProvider] = useState(searchParams.get('provider') || '');
