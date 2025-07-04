@@ -27,7 +27,9 @@
 
 ## 📖 Overview
 
-The **AI FinOps Platform** centralizes, normalizes and visualizes cloud cost data across AWS, Azure and GCP. Key features:
+**AI FinOps Platform** is an AI-powered platform for cloud cost optimization and forecasting. Built with FastAPI, Python, and modern MLOps tools, it allows teams to track multi-cloud usage (AWS, Azure, GPC), detect anomalies, and predict future expenses using real-time data and machine learning.
+
+Key features:
 
 - Unified ingestion pipelines for each provider
 - Powerful REST API with FastAPI & OpenAPI docs
