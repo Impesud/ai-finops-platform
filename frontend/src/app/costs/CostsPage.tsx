@@ -14,7 +14,6 @@ import {
   Line,
   CartesianGrid,
   Legend,
-  LabelList,
   Brush,
 } from 'recharts';
 
