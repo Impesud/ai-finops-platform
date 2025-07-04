@@ -25,6 +25,16 @@ export default function CostsPage() {
     cost_usd: number;
   }
 
+  // Types for the stacked and time‐series data entries
+  interface StackedEntry {
+    service: string;
+    [provider: string]: string | number;
+  }
+  interface TimeSeriesEntry {
+    date: string;
+    [provider: string]: string | number;
+  }
+
   const [data, setData] = useState<CostItem[]>([]);
   const [filteredData, setFilteredData] = useState<CostItem[]>([]);
   const [visibleData, setVisibleData] = useState<CostItem[]>([]);
@@ -131,24 +141,24 @@ export default function CostsPage() {
 
   // Stacked data for Cost by Service
   const services = Array.from(new Set(filteredData.map(x => x.service)));
-  const stackedData = services.map(svc => {
-    const entry: any = { service: svc };
+  const stackedData: StackedEntry[] = services.map(svc => {
+    const entry: StackedEntry = { service: svc };
     providers.forEach(p => {
       entry[p] = filteredData
-        .filter(x => x.service===svc && x.provider===p)
-        .reduce((sum,x)=>sum+x.cost_usd,0);
+        .filter(x => x.service === svc && x.provider === p)
+        .reduce((sum, x) => sum + x.cost_usd, 0);
     });
     return entry;
   });
 
   // Time series multi‐line data
-  const dates = Array.from(new Set(filteredData.map(x=>x.date))).sort();
-  const timeSeries = dates.map(d => {
-    const obj: any = { date: d };
+  const dates = Array.from(new Set(filteredData.map(x => x.date))).sort();
+  const timeSeries: TimeSeriesEntry[] = dates.map(d => {
+    const obj: TimeSeriesEntry = { date: d };
     providers.forEach(p => {
       obj[p] = filteredData
-        .filter(x=>x.date===d && x.provider===p)
-        .reduce((sum,x)=>sum+x.cost_usd,0);
+        .filter(x => x.date === d && x.provider === p)
+        .reduce((sum, x) => sum + x.cost_usd, 0);
     });
     return obj;
   });
