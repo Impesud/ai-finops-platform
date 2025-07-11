@@ -1,8 +1,11 @@
 from datetime import date
-from typing import List, Dict
+from typing import Dict, List
+
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.costmanagement import CostManagementClient
+
 from .base import BaseIngest
+
 
 class AzureIngest(BaseIngest):
     """
@@ -40,11 +43,12 @@ class AzureIngest(BaseIngest):
         # Each row is a list of values matching the columns: date, service, cost
         for row in query_result.rows:
             # row[0]: date, row[1]: service, row[2]: cost
-            results.append({
-                "date": row[0],
-                "service": row[1],
-                "cost_usd": float(row[2]),
-            })
+            results.append(
+                {
+                    "date": row[0],
+                    "service": row[1],
+                    "cost_usd": float(row[2]),
+                }
+            )
 
         return results
-

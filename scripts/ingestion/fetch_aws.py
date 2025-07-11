@@ -2,18 +2,18 @@
 # scripts/ingestion/fetch_aws.py
 
 from datetime import date
-from pathlib import Path
 
 from app.services.ingestion.aws_ingest import AwsIngest
+from app.services.ingestion.loader import DATA_DIR, save
 from app.services.ingestion.normalizer import normalize
-from app.services.ingestion.loader import save, DATA_DIR
+
 
 def main():
     start = date(2025, 1, 1)
-    end   = date(2025, 6, 30)
+    end = date(2025, 6, 30)
 
     # Determine the actual CSV path in app/data and delete it if present
-    output_file = DATA_DIR / 'aws_2025.csv'
+    output_file = DATA_DIR / "aws_2025.csv"
     if output_file.exists():
         print(f"Overwriting existing file: {output_file}")
         output_file.unlink()
@@ -28,7 +28,6 @@ def main():
     save(unified, filename="aws_2025.csv")
     print(f"Saved to {output_file}")
 
+
 if __name__ == "__main__":
     main()
-
-

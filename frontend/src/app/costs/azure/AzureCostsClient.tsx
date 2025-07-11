@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+import { useEffect, useState, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Navbar from "@/components/Navbar";
 import {
   BarChart,
   Bar,
@@ -16,7 +16,7 @@ import {
   Legend,
   LabelList,
   Brush,
-} from 'recharts';
+} from "recharts";
 
 export default function AzureCostsPage() {
   interface CostItem {
@@ -36,9 +36,11 @@ export default function AzureCostsPage() {
   const observerRef = useRef<HTMLTableRowElement | null>(null);
   const BATCH_SIZE = 100;
 
-  const [service, setService]     = useState(searchParams.get('service')   || '');
-  const [startDate, setStartDate] = useState(searchParams.get('start_date') || '');
-  const [endDate, setEndDate]     = useState(searchParams.get('end_date')   || '');
+  const [service, setService] = useState(searchParams.get("service") || "");
+  const [startDate, setStartDate] = useState(
+    searchParams.get("start_date") || "",
+  );
+  const [endDate, setEndDate] = useState(searchParams.get("end_date") || "");
 
   // 1) Fetch Azure‐only cost data
   useEffect(() => {
@@ -46,49 +48,52 @@ export default function AzureCostsPage() {
     setError(null);
 
     const params = new URLSearchParams();
-    if (service)   params.set('service', service);
-    if (startDate) params.set('start_date', startDate);
-    if (endDate)   params.set('end_date', endDate);
+    if (service) params.set("service", service);
+    if (startDate) params.set("start_date", startDate);
+    if (endDate) params.set("end_date", endDate);
 
     fetch(`/api/v1/costs/azure?${params.toString()}`)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((json: CostItem[]) => {
         // dedupe exact duplicates
         const unique = Array.from(
-          new Map(json.map(r => [`${r.date}|${r.service}|${r.cost_usd}`, r])).values()
+          new Map(
+            json.map((r) => [`${r.date}|${r.service}|${r.cost_usd}`, r]),
+          ).values(),
         );
         // drop entries without a service name
-        const nonEmpty = unique.filter(r => r.service.trim() !== '');
+        const nonEmpty = unique.filter((r) => r.service.trim() !== "");
 
         // sort by date asc
-        const sorted = [...nonEmpty].sort((a, b) =>
-          new Date(a.date).getTime() - new Date(b.date).getTime()
+        const sorted = [...nonEmpty].sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
         );
 
         setData(sorted);
         setFilteredData(sorted);
         setVisibleData(sorted.slice(0, BATCH_SIZE));
       })
-      .catch(() => setError('Failed to load Azure data.'))
+      .catch(() => setError("Failed to load Azure data."))
       .finally(() => setLoading(false));
   }, [service, startDate, endDate]);
 
   // 2) Sync filters → URL + filtered & visible lists
   useEffect(() => {
     const params = new URLSearchParams();
-    if (service)   params.set('service', service);
-    if (startDate) params.set('start_date', startDate);
-    if (endDate)   params.set('end_date', endDate);
+    if (service) params.set("service", service);
+    if (startDate) params.set("start_date", startDate);
+    if (endDate) params.set("end_date", endDate);
     router.replace(`/costs/azure?${params.toString()}`);
 
-    const filtered = data.filter(item =>
-      (!service   || item.service === service) &&
-      (!startDate || item.date    >= startDate) &&
-      (!endDate   || item.date    <= endDate)
+    const filtered = data.filter(
+      (item) =>
+        (!service || item.service === service) &&
+        (!startDate || item.date >= startDate) &&
+        (!endDate || item.date <= endDate),
     );
 
-    const sorted = [...filtered].sort((a, b) =>
-      new Date(a.date).getTime() - new Date(b.date).getTime()
+    const sorted = [...filtered].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
 
     setFilteredData(sorted);
@@ -104,18 +109,20 @@ export default function AzureCostsPage() {
 
         const next = filteredData.slice(
           visibleData.length,
-          visibleData.length + BATCH_SIZE
+          visibleData.length + BATCH_SIZE,
         );
-        const uniqueNew = next.filter(nb =>
-          !visibleData.some(v =>
-            v.date === nb.date &&
-            v.service === nb.service &&
-            v.cost_usd === nb.cost_usd
-          )
+        const uniqueNew = next.filter(
+          (nb) =>
+            !visibleData.some(
+              (v) =>
+                v.date === nb.date &&
+                v.service === nb.service &&
+                v.cost_usd === nb.cost_usd,
+            ),
         );
-        setVisibleData(v => [...v, ...uniqueNew]);
+        setVisibleData((v) => [...v, ...uniqueNew]);
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
     if (observerRef.current) obs.observe(observerRef.current);
     return () => obs.disconnect();
@@ -123,35 +130,43 @@ export default function AzureCostsPage() {
 
   // Overview metrics
   const totalCost = filteredData.reduce((sum, x) => sum + x.cost_usd, 0);
-  const periodStart = startDate || filteredData[0]?.date || '';
-  const periodEnd   = endDate   || filteredData.at(-1)?.date || '';
+  const periodStart = startDate || filteredData[0]?.date || "";
+  const periodEnd = endDate || filteredData.at(-1)?.date || "";
   let monthCount = 0;
   if (periodStart && periodEnd) {
-    const s = new Date(periodStart), e = new Date(periodEnd);
-    monthCount = (e.getFullYear() - s.getFullYear()) * 12 +
-                 (e.getMonth() - s.getMonth()) + 1;
+    const s = new Date(periodStart),
+      e = new Date(periodEnd);
+    monthCount =
+      (e.getFullYear() - s.getFullYear()) * 12 +
+      (e.getMonth() - s.getMonth()) +
+      1;
   }
-  const avgMonthly   = monthCount > 0 ? totalCost / monthCount : 0;
-  const serviceCount = new Set(filteredData.map(x => x.service)).size;
+  const avgMonthly = monthCount > 0 ? totalCost / monthCount : 0;
+  const serviceCount = new Set(filteredData.map((x) => x.service)).size;
 
   // Chart data
-  const serviceData = filteredData.reduce((acc, curr) => {
-    const f = acc.find(x => x.service === curr.service);
-    if (f) f.cost += curr.cost_usd;
-    else acc.push({ service: curr.service, cost: curr.cost_usd });
-    return acc;
-  }, [] as { service: string; cost: number }[]);
+  const serviceData = filteredData.reduce(
+    (acc, curr) => {
+      const f = acc.find((x) => x.service === curr.service);
+      if (f) f.cost += curr.cost_usd;
+      else acc.push({ service: curr.service, cost: curr.cost_usd });
+      return acc;
+    },
+    [] as { service: string; cost: number }[],
+  );
 
-  const dates = Array.from(new Set(filteredData.map(x => x.date))).sort();
-  const timeSeries = dates.map(d => ({
+  const dates = Array.from(new Set(filteredData.map((x) => x.date))).sort();
+  const timeSeries = dates.map((d) => ({
     date: d,
     cost: filteredData
-      .filter(x => x.date === d)
+      .filter((x) => x.date === d)
       .reduce((sum, x) => sum + x.cost_usd, 0),
   }));
 
   const resetFilters = () => {
-    setService(''); setStartDate(''); setEndDate('');
+    setService("");
+    setStartDate("");
+    setEndDate("");
   };
 
   return (
@@ -182,9 +197,7 @@ export default function AzureCostsPage() {
           </div>
           <div className="bg-white p-4 rounded-2xl shadow">
             <h2 className="text-lg text-gray-600">Services</h2>
-            <p className="text-2xl font-bold text-purple-600">
-              {serviceCount}
-            </p>
+            <p className="text-2xl font-bold text-purple-600">{serviceCount}</p>
           </div>
         </div>
 
@@ -193,14 +206,29 @@ export default function AzureCostsPage() {
           <div className="bg-white p-4 rounded-2xl shadow">
             <h2 className="text-lg text-gray-600 mb-2">Cost by Service</h2>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={serviceData} margin={{ top: 20, right: 30, bottom: 5 }}>
+              <BarChart
+                data={serviceData}
+                margin={{ top: 20, right: 30, bottom: 5 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="service" angle={-45} textAnchor="end" height={60} interval={0} />
-                <YAxis tickFormatter={v => `\$${v.toLocaleString()}`} />
-                <Tooltip formatter={v => `\$${(v as number).toFixed(2)}`} />
+                <XAxis
+                  dataKey="service"
+                  angle={-45}
+                  textAnchor="end"
+                  height={60}
+                  interval={0}
+                />
+                <YAxis tickFormatter={(v) => `\$${v.toLocaleString()}`} />
+                <Tooltip formatter={(v) => `\$${(v as number).toFixed(2)}`} />
                 <Legend verticalAlign="top" />
                 <Bar dataKey="cost" name="Cost">
-                  <LabelList dataKey="cost" position="top" formatter={(v: number) => `\$${(v as number).toLocaleString()}`} />
+                  <LabelList
+                    dataKey="cost"
+                    position="top"
+                    formatter={(v: number) =>
+                      `\$${(v as number).toLocaleString()}`
+                    }
+                  />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -208,14 +236,33 @@ export default function AzureCostsPage() {
           <div className="bg-white p-4 rounded-2xl shadow">
             <h2 className="text-lg text-gray-600 mb-2">Cost Over Time</h2>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={timeSeries} margin={{ top: 20, right: 30, bottom: 5 }}>
+              <LineChart
+                data={timeSeries}
+                margin={{ top: 20, right: 30, bottom: 5 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={d => d.slice(5)} minTickGap={20} />
-                <YAxis tickFormatter={v => `\$${v.toLocaleString()}`} />
-                <Tooltip formatter={v => `\$${(v as number).toFixed(2)}`} />
+                <XAxis
+                  dataKey="date"
+                  tickFormatter={(d) => d.slice(5)}
+                  minTickGap={20}
+                />
+                <YAxis tickFormatter={(v) => `\$${v.toLocaleString()}`} />
+                <Tooltip formatter={(v) => `\$${(v as number).toFixed(2)}`} />
                 <Legend verticalAlign="top" />
-                <Line type="monotone" dataKey="cost" stroke="#8884d8" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                <Brush dataKey="date" height={30} stroke="#8884d8" travellerWidth={10} />
+                <Line
+                  type="monotone"
+                  dataKey="cost"
+                  stroke="#8884d8"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+                <Brush
+                  dataKey="date"
+                  height={30}
+                  stroke="#8884d8"
+                  travellerWidth={10}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -226,11 +273,11 @@ export default function AzureCostsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <select
               value={service}
-              onChange={e => setService(e.target.value)}
+              onChange={(e) => setService(e.target.value)}
               className="border p-2 rounded"
             >
               <option value="">All Services</option>
-              {serviceData.map(s => (
+              {serviceData.map((s) => (
                 <option key={s.service} value={s.service}>
                   {s.service}
                 </option>
@@ -239,13 +286,13 @@ export default function AzureCostsPage() {
             <input
               type="date"
               value={startDate}
-              onChange={e => setStartDate(e.target.value)}
+              onChange={(e) => setStartDate(e.target.value)}
               className="border p-2 rounded"
             />
             <input
               type="date"
               value={endDate}
-              onChange={e => setEndDate(e.target.value)}
+              onChange={(e) => setEndDate(e.target.value)}
               className="border p-2 rounded"
             />
           </div>
@@ -278,7 +325,9 @@ export default function AzureCostsPage() {
                       <td className="p-2">${item.cost_usd.toFixed(2)}</td>
                     </tr>
                   ))}
-                  <tr ref={observerRef}><td colSpan={3}></td></tr>
+                  <tr ref={observerRef}>
+                    <td colSpan={3}></td>
+                  </tr>
                 </tbody>
               </table>
             </div>

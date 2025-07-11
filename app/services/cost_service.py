@@ -1,17 +1,18 @@
 # app/services/cost_service.py
 
+import logging
 import os
 from datetime import date
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
-from fastapi import HTTPException
 import pandas as pd
+from fastapi import HTTPException
 
 from app.services.etl import load_and_transform
 
 # ─── point DATA_DIR at app/data ──────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-APP_DIR  = os.path.abspath(os.path.join(BASE_DIR, ".."))
+APP_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
 DATA_DIR = os.path.join(APP_DIR, "data")
 
 if not os.path.isdir(DATA_DIR):
@@ -34,9 +35,9 @@ def _apply_filters(
 
 
 def get_aws_cost_data(
-    service: Optional[str]   = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str]   = None,
+    service: Optional[str] = None,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
 ) -> List[Dict]:
     csv_path = os.path.join(DATA_DIR, "aws_2025.csv")
     if not os.path.isfile(csv_path):
@@ -48,9 +49,9 @@ def get_aws_cost_data(
 
 
 def get_azure_cost_data(
-    service: Optional[str]   = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str]   = None,
+    service: Optional[str] = None,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
 ) -> List[Dict]:
     csv_path = os.path.join(DATA_DIR, "azure_2025.csv")
     if not os.path.isfile(csv_path):
@@ -62,9 +63,9 @@ def get_azure_cost_data(
 
 
 def get_gcp_cost_data(
-    service: Optional[str]   = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str]   = None,
+    service: Optional[str] = None,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
 ) -> List[Dict]:
     csv_path = os.path.join(DATA_DIR, "gcp_2025.csv")
     if not os.path.isfile(csv_path):
@@ -76,9 +77,9 @@ def get_gcp_cost_data(
 
 
 def get_cost_data(
-    service: Optional[str]   = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str]   = None,
+    service: Optional[str] = None,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
 ) -> List[Dict]:
     """
     Unified fetch across AWS, Azure, and GCP CSVs.
@@ -98,10 +99,6 @@ def get_cost_data(
     try:
         merged.sort(key=lambda r: date.fromisoformat(r["date"]))
     except Exception:
-        pass
+        logging.exception("Exception occurred in Cost Service")
 
     return merged
-
-
-
-

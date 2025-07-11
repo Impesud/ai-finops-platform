@@ -1,135 +1,136 @@
-## API Endpoints Documentation
+# API Endpoints Documentation
 
-FastAPI service now exposes three separate endpoints for each cloud provider under `/api/v1/costs`.
+FastAPI exposes three endpoints under `/api/v1/costs` for AWS, Azure, and GCP.
 
-### AWS Endpoint
+## AWS Endpoint
 
-```
+```http
 GET /api/v1/costs/aws
 ```
 
-**Query Parameters (all optional):**
+**Query parameters (optional):**
 
-- `service` (string): e.g. `AmazonEC2`
-- `account_id` (string): AWS account ID
+- `service` (string) e.g. `AmazonEC2`
+- `account_id` (string) AWS account ID
 - `start_date` (YYYY-MM-DD)
 - `end_date` (YYYY-MM-DD)
 
-**Usage Examples:**
+### Examples
 
-**Without filters** (returns all AWS cost records):
+Without filters (all AWS costs):
 
 ```bash
-curl "http://localhost:8000/api/v1/costs/aws"
+curl \
+  "http://localhost:8000/api/v1/costs/aws"
 ```
 
-**With filters:**
+With filters:
 
 ```bash
-curl "http://localhost:8000/api/v1/costs/aws?service=AmazonS3&start_date=2025-06-01&end_date=2025-06-30"
+curl \
+  "http://localhost:8000/api/v1/costs/aws?service=AmazonS3&\
+start_date=2025-06-01&end_date=2025-06-30"
 ```
 
 ---
 
-### Azure Endpoint
+## Azure Endpoint
 
-```
+```http
 GET /api/v1/costs/azure
 ```
 
-**Query Parameters (all optional):**
+**Query parameters (optional):**
 
-- `service` (string): e.g. `Virtual Machines`
-- `account_id` (string): Azure subscription ID
+- `service` (string) e.g. `Virtual Machines`
+- `account_id` (string) Azure subscription ID
 - `start_date` (YYYY-MM-DD)
 - `end_date` (YYYY-MM-DD)
 
-**Usage Examples:**
-
-**Without filters:**
+### Examples Azure Endpoint
 
 ```bash
-curl "http://localhost:8000/api/v1/costs/azure"
+curl \
+  "http://localhost:8000/api/v1/costs/azure"
 ```
 
-**With filters:**
-
 ```bash
-curl "http://localhost:8000/api/v1/costs/azure?start_date=2025-05-01&end_date=2025-05-31"
+curl \
+  "http://localhost:8000/api/v1/costs/azure?\
+start_date=2025-05-01&end_date=2025-05-31"
 ```
 
 ---
 
-### GCP Endpoint
+## GCP Endpoint
 
-```
+```http
 GET /api/v1/costs/gcp
 ```
 
-**Query Parameters (all optional):**
+**Query parameters (optional):**
 
-- `service` (string): e.g. `Compute Engine`
-- `account_id` (string): GCP project ID
+- `service` (string) e.g. `Compute Engine`
+- `account_id` (string) GCP project ID
 - `start_date` (YYYY-MM-DD)
 - `end_date` (YYYY-MM-DD)
 
-**Usage Examples:**
-
-**Without filters:**
+### Examples GCP Endpoint
 
 ```bash
-curl "http://localhost:8000/api/v1/costs/gcp"
+curl \
+  "http://localhost:8000/api/v1/costs/gcp"
 ```
 
-**With filters:**
-
 ```bash
-curl "http://localhost:8000/api/v1/costs/gcp?account_id=impesud-1336&start_date=2025-04-01&end_date=2025-04-30"
+curl \
+  "http://localhost:8000/api/v1/costs/gcp?\
+account_id=impesud-1336&start_date=2025-04-01&end_date=2025-04-30"
 ```
 
 ---
 
-## Documentation UIs (Swagger UI and ReDoc)
+## Documentation UIs
 
-**Backend Swagger UI** is available at:
+**Swagger UI (backend):**
 
-```
+```http
 http://localhost:8000/docs
 ```
 
-**Backend ReDoc** is available at:
+**ReDoc (backend):**
 
-```
+```http
 http://localhost:8000/redoc
 ```
 
-**Frontend integration** via Next.js proxy:
+**Next.js proxy (frontend):**
 
-```
-http://localhost:3000/docs    # Swagger UI
-http://localhost:3000/redocs  # ReDoc
+```http
+http://localhost:3000/docs
+http://localhost:3000/redocs
 ```
 
-Make sure your frontend `next.config.ts` includes these rewrites:
+### Next.js rewrites (`next.config.ts`)
 
 ```ts
-const API_BASE =
-  process.env.NODE_ENV === 'development'
-    ? 'http://127.0.0.1:8000'
-    : process.env.NEXT_PUBLIC_API_URL!;
+async rewrites() {
+  return [
+    { source: '/api/:path*',    destination: `${API_BASE}/api/:path*` },
+    { source: '/docs/:path*',   destination: `${API_BASE}/docs/:path*` },
+    { source: '/redocs/:path*', destination: `${API_BASE}/redoc/:path*` },
+  ];
+}
+```
 
-const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${API_BASE}/api/:path*`,
-      },
-    ];
-  },
-};
+Ensure:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ---
 
-*Last updated: July 2025*
+## Change Log
+
+Last updated: July 2025

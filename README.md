@@ -27,7 +27,10 @@
 
 ## 📖 Overview
 
-**AI FinOps Platform** is an AI-powered platform for cloud cost optimization and forecasting. Built with FastAPI, Python, and modern MLOps tools, it allows teams to track multi-cloud usage (AWS, Azure, GPC), detect anomalies, and predict future expenses using real-time data and machine learning.
+**AI FinOps Platform** is an AI-powered platform for cloud cost optimization
+and forecasting. Built with FastAPI, Python, and modern MLOps tools, it allows
+teams to track multi-cloud usage (AWS, Azure, GPC), detect anomalies, and predict
+future expenses using real-time data and machine learning.
 
 Key features:
 
@@ -38,6 +41,7 @@ Key features:
 - Full IaC deployment via Terraform & Helm
 
 ### Recent UI Updates
+
 ![FinOps frontend 01](docs/img/ai-finops-01.png)
 ![FinOps frontend 02](docs/img/ai-finops-02.png)
 ![FinOps frontend 03](docs/img/ai-finops-03.png)
@@ -47,6 +51,7 @@ Key features:
 ## 🧱 Tech Stack
 
 ### Infrastructure & DevOps
+
 - Terraform (infrastructure provisioning)
 - Kubernetes + Helm (orchestration)
 - Docker (containerization)
@@ -55,23 +60,27 @@ Key features:
 - Cloud Billing APIs (AWS, Azure, GCP)
 
 ### Backend
+
 - Python (FastAPI)
 - PostgreSQL (relational DB)
 - InfluxDB (time series data)
 
 ### AI/ML
+
 - Forecasting: XGBoost, statsmodels
 - Clustering: KMeans
 - Anomaly Detection: Isolation Forest, Autoencoders
 - Recommendation: Reinforcement Learning models
 
 ### Frontend
+
 - React + TailwindCSS (Next.js)
 - Data visualization with Recharts / Chart.js
 
 ---
 
 ## 🎯 Objectives
+
 - Optimize cloud resource usage and cost efficiency
 - Predict monthly spending using machine learning
 - Detect anomalous cost spikes and resource misusage
@@ -127,15 +136,19 @@ make dev
 - ReDoc:     http://localhost:3000/redoc
 
 # 6. Deploy Pipeline on AWS (Helm + EKS)
-make full-setup #To provision the full environment (EKS cluster, IAM, ALB controller, Helm setup, etc.)
-make deploy #To deploy or update the platform on an existing cluster (after building & pushing images)
+# To provision the full environment 
+# (EKS cluster, IAM, ALB controller, Helm setup, etc.)
+make full-setup 
+# To deploy or update the platform on an existing cluster 
+# (after building & pushing images)
+make deploy 
 ```
 
 ---
 
 ## 📂 Repository Structure
 
-```
+```bash
 app/           # FastAPI backend
 frontend/      # Next.js dashboard
 services/      # ETL & ingestion modules

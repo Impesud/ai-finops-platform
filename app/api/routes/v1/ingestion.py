@@ -1,16 +1,17 @@
 # app/api/routes/v1/ingestion.py
 
 import os
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
 from datetime import date
 from typing import Any, Dict
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
 
 from app.services.ingestion.aws_ingest import AwsIngest
 from app.services.ingestion.azure_ingest import AzureIngest
 from app.services.ingestion.gcp_ingest import GcpIngest
-from app.services.ingestion.normalizer import normalize
 from app.services.ingestion.loader import save
+from app.services.ingestion.normalizer import normalize
 
 router = APIRouter(
     prefix="/ingestion",
@@ -51,7 +52,7 @@ class IngestResponse(BaseModel):
 )
 async def ingest_all(payload: IngestRequest) -> Dict[str, Any]:
     # AWS
-    aws = AwsIngest(profile_name=None, region_name=None)
+    aws = AwsIngest(profile_name="", region_name="")
     raw_aws = aws.fetch(payload.start, payload.end)
 
     # Azure
@@ -63,10 +64,13 @@ async def ingest_all(payload: IngestRequest) -> Dict[str, Any]:
 
     # GCP
     proj = os.getenv("GCP_PROJECT_ID")
-    ds   = os.getenv("GCP_DATASET")
-    tbl  = os.getenv("GCP_TABLE")
+    ds = os.getenv("GCP_DATASET")
+    tbl = os.getenv("GCP_TABLE")
     if not (proj and ds and tbl):
-        raise HTTPException(500, "Missing GCP_PROJECT_ID, GCP_DATASET, or GCP_TABLE environment variables")
+        raise HTTPException(
+            500,
+            "Missing GCP_PROJECT_ID, GCP_DATASET, or GCP_TABLE environment variables",
+        )
     gcp = GcpIngest(project_id=proj, dataset=ds, table=tbl)
     raw_gcp = gcp.fetch(payload.start, payload.end)
 
@@ -75,5 +79,3 @@ async def ingest_all(payload: IngestRequest) -> Dict[str, Any]:
     save(unified)
 
     return IngestResponse(status="ok", count=len(unified)).dict()
-
-

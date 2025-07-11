@@ -1,9 +1,11 @@
 # tests/test_api.py
 
+from datetime import datetime
+
 import pytest
 from fastapi.testclient import TestClient
+
 from app.main import app
-from datetime import datetime
 
 client = TestClient(app)
 
@@ -21,13 +23,17 @@ def test_get_all_costs():
 
 
 def test_get_costs_by_service():
-    response = client.get("/api/v1/costs?service=Amazon+Elastic+Compute+Cloud+-+Compute")
+    response = client.get(
+        "/api/v1/costs?service=Amazon+Elastic+Compute+Cloud+-+Compute"
+    )
     if response.status_code == 404:
         pytest.skip("No cost CSV present, skipping service filter test")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
-    assert all(item["service"] == "Amazon Elastic Compute Cloud - Compute" for item in data)
+    assert all(
+        item["service"] == "Amazon Elastic Compute Cloud - Compute" for item in data
+    )
 
 
 def test_get_costs_date_range():
@@ -41,8 +47,8 @@ def test_get_costs_date_range():
     assert len(data) > 0
     for item in data:
         d = datetime.fromisoformat(item["date"]).date()
-        assert datetime.fromisoformat(start_date).date() <= d <= datetime.fromisoformat(end_date).date()
-
-
-
-
+        assert (
+            datetime.fromisoformat(start_date).date()
+            <= d
+            <= datetime.fromisoformat(end_date).date()
+        )

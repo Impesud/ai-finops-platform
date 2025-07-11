@@ -127,3 +127,36 @@ cluster-reset:
 destroy-eks:
 	chmod +x ./scripts/destroy-eks.sh && ./scripts/destroy-eks.sh
 
+# --- Lint & Test Locali --------------------------------
+
+# Python lint & format
+lint-python:
+	@echo ">>> Running flake8, isort, black"
+	flake8 app services scripts
+	isort --profile black --check-only .
+	black --check .
+
+# Type checking
+type-check:
+	@echo ">>> Running mypy"
+	mypy app services scripts
+
+# Security scan
+security-scan:
+	@echo ">>> Running bandit"
+	bandit -r app services scripts
+
+# Markdown lint
+lint-md:
+	@echo ">>> Running markdownlint"
+	markdownlint .
+
+# ESLint frontend
+lint-frontend:
+	@echo ">>> Running ESLint"
+	cd frontend && npm run lint
+
+# Aggregatore
+lint-all: lint-python type-check security-scan lint-md lint-frontend
+
+
