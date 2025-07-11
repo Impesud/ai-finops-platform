@@ -1,10 +1,7 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes.v1 import api_info
-from app.api.routes.v1 import costs
-from app.api.routes.v1 import ingestion
+from app.api.routes.v1 import api_info, costs, ingestion
 
 tags_metadata = [
     {
@@ -29,17 +26,11 @@ app = FastAPI(
     title="AI FinOps Platform API",
     version="1.0.0",
     description="API for extracting, normalizing and analyzing cloud cost data across AWS, Azure and GCP.",
-    contact={
-        "name": "Erick Jara",
-        "url": "https://github.com/Impesud"
-    },
-    license_info={
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-    },
+    contact={"name": "Erick Jara", "url": "https://github.com/Impesud"},
+    license_info={"name": "MIT", "url": "https://opensource.org/licenses/MIT"},
     servers=[
         {"url": "http://localhost:8000", "description": "Local dev"},
-        {"url": "https://api.yourdomain.com", "description": "Production API"}
+        {"url": "https://api.yourdomain.com", "description": "Production API"},
     ],
     openapi_tags=tags_metadata,
     openapi_url="/openapi.json",
@@ -64,9 +55,3 @@ app.add_middleware(
 app.include_router(api_info.router, prefix="/api/v1", tags=["info"])
 app.include_router(ingestion.router, prefix="/api/v1", tags=["ingestion"])
 app.include_router(costs.router, prefix="/api/v1", tags=["costs"])
-
-
-
-
-
-

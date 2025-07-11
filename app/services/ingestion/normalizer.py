@@ -1,5 +1,6 @@
-from typing import List, Dict
-from datetime import date
+from datetime import date, datetime
+from typing import Dict, List
+
 
 def normalize(*args: List[Dict]) -> List[Dict]:
     """
@@ -9,13 +10,15 @@ def normalize(*args: List[Dict]) -> List[Dict]:
     unified = []
     for source in args:
         for rec in source:
-            # ensure date is ISO string
-            d = rec.get('date')
-            if hasattr(d, 'date'):
-                d = d.date().isoformat()
-            unified.append({
-                'date': d,
-                'service': rec.get('service'),
-                'cost_usd': rec.get('cost_usd'),
-            })
+            d = rec.get("date")
+            # Convert date/datetime to ISO string, leave string as is
+            if isinstance(d, (date, datetime)):
+                d = d.isoformat()
+            unified.append(
+                {
+                    "date": d,
+                    "service": rec.get("service"),
+                    "cost_usd": rec.get("cost_usd"),
+                }
+            )
     return unified

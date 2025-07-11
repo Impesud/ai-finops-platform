@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 const RedocStandalone = dynamic(
   () => import("redoc").then((mod) => mod.RedocStandalone),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function ReDocPage() {
@@ -15,5 +15,3 @@ export default function ReDocPage() {
     </div>
   );
 }
-
-

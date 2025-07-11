@@ -2,63 +2,66 @@
 
 ## Local Setup & Development
 
-**1. Create Python virtual environment**
+1. **Create Python virtual environment**
 
-```bash
-make init
-```
+   ```bash
+   make init
+   ```
 
-Creates `venv/` and installs dependencies from `requirements.txt`.
+   Installs dependencies in `venv/` from `requirements.txt`.
 
-**2. Run FastAPI backend**
+2. **Run FastAPI backend**
 
-```bash
-make backend
-```
+   ```bash
+   make backend
+   ```
 
-Starts the API at `http://127.0.0.1:8000` with auto-reload.
+   Starts the API at `http://127.0.0.1:8000` with auto-reload.
 
-**3. Run full stack**
+3. **Run full stack**
 
-```bash
-make dev
-```
+   ```bash
+   make dev
+   ```
 
-Launches React frontend (`http://localhost:3000`) and FastAPI backend concurrently.
+   Launches React frontend (`http://localhost:3000`) and FastAPI backend concurrently.
 
-**4. Access API docs**
+4. **Access API documentation**
 
-- Swagger UI:  `http://localhost:8000/docs` or `http://localhost:3000/docs`
-- ReDoc:        `http://localhost:8000/redoc` or `http://localhost:3000/redocs`
+   - Swagger UI: `http://localhost:8000/docs` or `http://localhost:3000/docs`
+   - ReDoc:       `http://localhost:8000/redoc` or `http://localhost:3000/redocs`
 
-**5. Trigger ingestion**
+5. **Trigger ingestion**
 
-- **All providers** (via API):
-  ```bash
-  make ingest-api
-  ```
-- **Per provider** (overwrite CSVs in `app/data/`):
-  ```bash
-  make fetch-aws
-  make fetch-azure
-  make fetch-gcp
-  ```
+   - All providers (via API):
 
-**6. Run tests**
+     ```bash
+     make ingest-api
+     ```
 
-```bash
-make test
-```
+   - Per provider (overwrite CSVs in `app/data/`):
 
-Executes all backend pytest suites.
+     ```bash
+     make fetch-aws
+     make fetch-azure
+     make fetch-gcp
+     ```
 
-**7. Clean environment**
+6. **Run tests**
 
-```bash
-make clean
-```
+   ```bash
+   make test
+   ```
 
-Removes Python caches and pytest cache.
+   Executes all backend pytest suites.
+
+7. **Clean environment**
+
+   ```bash
+   make clean
+   ```
+
+   Removes Python caches and pytest cache.
 
 ## Jupyter Notebooks
 
@@ -68,7 +71,7 @@ Launch the notebook server:
 make notebook
 ```
 
-Then open:
+Open in browser:
 
 - `notebooks/01_forecasting.ipynb`
 - `notebooks/02_anomaly_detection.ipynb`
@@ -76,14 +79,14 @@ Then open:
 
 ## Docker Compose (Local Container)
 
-**Build & start services**
+### Build & start services
 
 ```bash
 make docker-build-local
 make docker-up
 ```
 
-**Stop**
+### Stop containers
 
 ```bash
 make docker-down
@@ -91,36 +94,43 @@ make docker-down
 
 ## Production Deployment
 
-1. **Install CLI tools** (kubectl, eksctl, helm, terraform):
+1. **Install CLI tools**
+
    ```bash
    make install-tools
    ```
-2. **Provision EKS/GKE/AKS**
+
+2. **Provision Kubernetes cluster**
+
    ```bash
    make setup-eks
    make setup-lb-controller
    ```
+
 3. **Build & push images, deploy via Helm**
+
    ```bash
    make build-push
    make helm-deploy
    make get-url
    ```
+
 4. **Full deploy script**
+
    ```bash
    make full-setup
    ```
 
 ## Project Structure
 
-```
+```plaintext
 app/           # FastAPI backend
-frontend/      # Next.js React dashboard
+frontend/      # Next.js dashboard
 notebooks/     # ML notebooks
 infra/         # Terraform & Helm charts
-scripts/       # Ingestion & deploy scripts
+scripts/       # Ingestion & deployment scripts
 tests/         # Pytest suites
-app/data/      # Generated CSVs (aws_2025.csv, ...)
+app/data/      # Generated CSV datasets
 Makefile       # Task automation
 requirements.txt
 docker-compose.yml
@@ -133,6 +143,8 @@ docker-compose.yml
 - **ML:** XGBoost, Prophet, Isolation Forest, MLflow
 - **Infra:** Terraform, Kubernetes (Helm), Prometheus, Grafana
 
-*Last updated: July 2025*
+---
 
+## Change Log
 
+Last updated: July 2025
